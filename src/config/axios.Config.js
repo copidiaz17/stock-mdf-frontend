@@ -2,7 +2,8 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://backend-stock-falube.onrender.com', 
+  baseURL: import.meta.env.VITE_API_URL,
+withCredentials: true, 
   timeout: 10000, // Evita que quede colgado si el servidor no 
    
   headers: {
