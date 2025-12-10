@@ -1,0 +1,572 @@
+  /* =======================
+      GENERAL
+  ======================= */
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    /* FUENTE MÁS MODERNA */
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #121212;
+    color: #f0f0c0;
+  }
+
+  /* =======================
+      HEADER (Diseño para Estiramiento del Logo)
+  ======================= */
+  .header {
+    /* Habilitamos flexbox horizontal y el estiramiento vertical de los ítems */
+    display: flex; 
+    align-items: stretch; /* CLAVE para que el logo y el widget se estiren */
+    padding: 0.5rem 1rem;
+    background-color: #1a1a1a;
+    position: relative;
+    padding-bottom: 0.5rem; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  }
+
+  .logo {
+    /* AJUSTE CLAVE: ESTIRAR EL LOGO A LA ALTURA TOTAL DEL HEADER */
+    height: 100%; 
+    width: 150px; 
+    object-fit: contain; 
+    margin-right: 1.5rem;
+  }
+
+  /* CONTENEDOR CENTRAL: Título y Botones agrupados */
+  .header-main-area {
+      display: flex;
+      flex-direction: column;
+      justify-content: center; 
+      align-items: center;
+      flex-grow: 1; /* Ocupa el espacio central */
+      padding: 0.5rem 0;
+  }
+
+  /* Título Principal (En Header) */
+  .main-dashboard-title {
+      font-size: 2.5rem;
+      font-weight: 900; 
+      text-align: center;
+      color: #f0c040; 
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(240, 192, 64, 0.3);
+      margin-bottom: 5px; 
+  }
+
+  .hamburger {
+    display: none;
+    font-size: 1.5rem;
+    background: none;
+    border: none;
+    color: #f0c040;
+    cursor: pointer;
+    align-self: flex-start;
+  }
+
+  .action-buttons-container {
+      display: flex;
+      justify-content: center; 
+      gap: 15px; 
+      padding: 0 10px;
+      margin-left: 0; 
+      margin-bottom: 5px; 
+  }
+
+  /* ===============================================
+      WIDGET DE PERFIL Y LOGOUT (Corregido para visibilidad)
+  =============================================== */
+  .user-profile-widget {
+      /* CORRECCIÓN CLAVE: Empuja el widget a la derecha */
+      margin-left: auto; 
+      /* Asegura que esté centrado verticalmente */
+      align-self: center; 
+      
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end; 
+      justify-content: center;
+      padding-left: 1rem;
+      padding-right: 0.5rem; 
+      
+      min-width: 150px; 
+      /* Z-INDEX para asegurar que no quede detrás del título central */
+      position: relative; 
+      z-index: 10; 
+  }
+
+  .welcome-text {
+      font-size: 0.85rem;
+      color: #ccc;
+      margin: 0;
+      padding: 0;
+  }
+
+  .user-name {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: #f0c040; 
+      margin: 0;
+      padding: 0;
+      margin-bottom: 5px;
+  }
+
+  /* ESTILO DEL BOTÓN DE LOGOUT (ICONO) */
+  .btn-logout {
+      background: none; 
+      border: none;
+      padding: 5px; 
+      cursor: pointer;
+      font-size: 1.2rem; 
+      transition: color 0.2s;
+      color: #f0c040; 
+      
+      /* Corrección de visibilidad */
+      display: inline-block; 
+      margin-top: 5px; 
+  }
+
+  .btn-logout:hover {
+      color: white; 
+      background: none;
+  }
+
+  .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border-width: 0;
+  }
+
+
+  /* =======================
+      MAIN CONTENT & SIDEBAR
+  ======================= */
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .sidebar {
+    background-color: #1a1a1a;
+    color: #f0c040;
+    width: 250px;
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    flex-shrink: 0;
+  }
+
+  .sidebar-title {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  .obra-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  /* Lista de Obras: Transiciones más suaves y redondeo */
+  .obra-list li {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    margin-bottom: 0.5rem;
+    border-radius: 8px; /* Redondeo */
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .obra-list li:hover {
+    background-color: #2c2c2c;
+    transform: translateX(3px); /* Movimiento sutil */
+  }
+
+  .obra-list li .icon {
+    margin-right: 0.5rem;
+    font-size: 1.3rem;
+    transition: transform 0.3s, color 0.3s;
+  }
+
+  .obra-list li:hover .icon {
+    transform: rotate(-10deg) scale(1.2);
+    color: #f0e68c;
+  }
+
+  .obra-nombre {
+    flex-grow: 1;
+  }
+
+  .active-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background-color: #f0c040;
+    border-radius: 0 3px 3px 0;
+    transition: top 0.3s ease, height 0.3s ease;
+  }
+
+  .selected {
+    background-color: #2c2c2c;
+  }
+
+  /* =======================
+      PANEL CENTRAL / OBRA DETALLE LAYOUT
+  ======================= */
+  .panel-central {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  /* Estilos de layout MOVILIZADOS desde ObraDetalleView.vue */
+  .obra-detalle-container {
+    padding: 20px;
+  }
+
+  .obra-info {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .panel-dividido {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+  }
+  /* Estilos MOVILIZADOS */
+
+
+  .materiales table, .movimientos table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px; /* Redondeo en tablas */
+    overflow: hidden;
+  }
+  .materiales th, .materiales td, .movimientos th, .movimientos td {
+    border: 1px solid #444;
+    padding: 0.5rem;
+    text-align: left;
+  }
+
+  /* Estilo para el mensaje de estado vacío (cuando no hay materiales) */
+  .materiales-empty-state {
+      text-align: center;
+      padding: 20px;
+      border: 1px dashed #444; 
+      border-radius: 8px;
+      margin-top: 10px;
+      color: #f0f0c0;
+      background-color: #2c2c2c; 
+  }
+
+
+  .ingreso {
+    color: #4caf50;
+  }
+
+  .salida {
+    color: #f44336;
+  }
+
+  /* SIN SELECCIÓN */
+  .sin-seleccion {
+    text-align: center;
+    margin-top: 2rem;
+    font-style: italic;
+    color: #ccc;
+  }
+
+  /* ===============================================
+      ACCIONES Y FORMULARIOS
+  =============================================== */
+
+  /* Botones de acción principal (En Header) */
+
+  .btn-action {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px; 
+      cursor: pointer;
+      color: #1a1a1a; 
+      transition: all 0.3s ease; 
+      display: flex;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6); 
+  }
+
+  .btn-action:hover {
+      transform: translateY(-3px); 
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.8);
+  }
+
+  .btn-action i {
+      margin-right: 8px;
+  }
+
+  .btn-create-obra {
+      background-color: #f0c040; 
+  }
+  .btn-create-material {
+      background-color: #3f51b5; 
+      color: #f0c040; 
+  }
+
+  .btn-manage-items {
+      background-color: #28a745; 
+      color: white; 
+  }
+
+  .btn-create-obra:hover {
+      background-color: #f5d371;
+  }
+  .btn-create-material:hover {
+      background-color: #303f9f;
+  }
+
+  .btn-manage-items:hover {
+      background-color: #1e7e34;
+  }
+
+  /* Estilos de Tarjeta (Card) y Centrado de Vistas de Formulario */
+  .panel-content-centered {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh; 
+      flex-direction: column; 
+  }
+
+  .card {
+      background-color: #1a1a1a; 
+      padding: 30px;
+      border-radius: 12px; 
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), 0 3px 6px rgba(0, 0, 0, 0.3);
+      width: 90%;
+      max-width: 500px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.8), 0 6px 12px rgba(0, 0, 0, 0.4);
+  }
+
+  /* Espacio entre cards apiladas (usado en ItemObraView) */
+  .list-margin-top {
+      margin-top: 25px; 
+  }
+
+  .titulo-pagina {
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 25px;
+    font-weight: bold;
+    color: #f0c040; 
+  }
+
+  /* Inputs y Selectores */
+  .form-group {
+      margin-bottom: 15px;
+  }
+
+  .form-label {
+      display: block;
+      margin-bottom: 5px;
+      color: #f0c040;
+      font-weight: bold;
+  }
+
+  .input-control {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #333;
+      border-radius: 8px; 
+      background-color: #2c2c2c;
+      color: #f0f0c0;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease; 
+  }
+
+  .input-control:focus {
+      outline: none; 
+      border-color: #f0c040; 
+      box-shadow: 0 0 0 2px rgba(240, 192, 64, 0.4); 
+  }
+
+  /* Botones Genéricos de Formulario (Guardar) */
+  .btn-primary {
+      padding: 10px 15px;
+      border: none;
+      border-radius: 8px; 
+      cursor: pointer;
+      color: #1a1a1a;
+      font-weight: bold;
+      width: 100%;
+      margin-top: 20px;
+      transition: background-color 0.2s ease;
+  }
+
+  /* Botón pequeño (para tablas) */
+  .btn-small {
+      padding: 4px 8px; 
+      font-size: 0.8rem;
+      font-weight: normal;
+      width: auto; 
+      margin: 0 4px; 
+  }
+
+  .btn-success { background-color: #4caf50; }
+  .btn-danger { background-color: #f44336; }
+
+  .btn-success:hover { background-color: #388e3c; }
+  .btn-danger:hover { background-color: #d32f2f; }
+
+  /* Mensajes de Alerta */
+  .alert {
+      padding: 10px;
+      border-radius: 8px; 
+      margin-top: 15px;
+      font-weight: bold;
+  }
+  .alert.success {
+      background-color: rgba(76, 175, 80, 0.2);
+      color: #4caf50;
+  }
+  .alert.error {
+      background-color: rgba(244, 67, 54, 0.2);
+      color: #f44336;
+  }
+
+  /* ESTILO ESPECÍFICO DE POSICIÓN PARA BOTÓN EN DETALLE DE OBRA */
+  .manage-item-btn {
+      background-color: #28a745; 
+      color: white; 
+      margin-top: 15px; 
+      padding: 8px 15px; 
+      font-size: 0.95rem;
+      width: auto; 
+      display: block; 
+      margin-left: auto; 
+      margin-right: auto; 
+  }
+
+
+  /* =======================
+      RESPONSIVE
+  ======================= */
+
+  /* MÓVIL (<600px) */
+  @media (max-width: 599px) {
+    .hamburger { display: block;
+    z-index: 1001; }
+    
+    .header {
+      padding: 0.5rem;
+      padding-bottom: 0.5rem; 
+    }
+
+    /* Esconder el widget de perfil en móvil */
+    .user-profile-widget {
+        display: none;
+    }
+    
+    .header-top {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    
+    .main-dashboard-title {
+        font-size: 1.8rem;
+        margin-top: 5px;
+    }
+    
+    .logo { margin-bottom: 0.5rem; margin-right: 0; }
+    .hamburger { position: absolute; top: 10px; right: 10px; }
+
+
+    .header-bottom {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .action-buttons-container {
+        flex-direction: column;
+        gap: 10px;
+        padding: 0;
+        width: 90%;
+        margin-bottom: 0;
+        margin-left: 0; 
+    }
+
+    .btn-action {
+        width: 100%;
+    }
+    
+    .sidebar {
+      position: fixed;
+      top: 0; 
+      left: 0;
+      width: 250px;
+      height: 100%;
+      z-index: 1000; 
+      
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.3);
+    }
+    .sidebar.open { transform: translateX(0px); }
+
+    .main-content { position: relative; z-index: 5; }
+    .panel-dividido { flex-direction: column; gap: 0.5rem; }
+    .materiales, .movimientos { flex: 1 1 100%; max-height: none; }
+    
+    .panel-content-centered { 
+      min-height: auto; 
+      padding: 10px;
+    }
+    
+    .card {
+        max-width: 100%;
+    }
+  }
+
+  /* TABLET (600px - 991px) */
+  @media (min-width: 600px) and (max-width: 991px) {
+    .sidebar {
+      width: 220px;
+      position: relative;
+      transform: translateX(0);
+      box-shadow: none;
+    }
+    
+    .main-dashboard-title {
+        font-size: 2.2rem;
+    }
+
+    .panel-dividido { gap: 1rem; flex-wrap: wrap; }
+    .materiales, .movimientos { flex: 1 1 48%; max-height: 350px; }
+  }
+
+  /* DESKTOP GRANDE (≥1200px) */
+  @media (min-width: 1200px) {
+    .dashboard { font-size: 16px; }
+    .sidebar { width: 250px; }
+    .panel-dividido { gap: 1.5rem; }
+    .materiales, .movimientos { max-height: 400px; }
+  }
