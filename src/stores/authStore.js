@@ -47,13 +47,21 @@ export const useAuthStore = defineStore('auth', {
             if (token) {
                 try {
                     const decoded = jwtDecode(token);
+                    this.token = token;
                     this.user = decoded;
                     this.role = decoded.rol;
-                    this.token = token;
+                    
                 } catch (e) {
                     this.logout();
                 }
             }
+        },
+
+        init() {
+            const token = localStorage.getItem('token');
+        if (token) {
+            this.loadUserFromToken(token);
+        }
         },
 
         logout() {
@@ -63,8 +71,6 @@ export const useAuthStore = defineStore('auth', {
             localStorage.removeItem('token');
         },
 
-        init() {
-            this.loadUserFromToken(this.token);
-        }
+        
     }
 });
