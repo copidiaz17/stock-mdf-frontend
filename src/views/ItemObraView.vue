@@ -156,30 +156,41 @@ export default {
     },
 
     async createItem() {
-      this.message = '';
-      this.isSuccess = false;
+  this.message = '';
+  this.isSuccess = false;
 
-      try {
-        if (!this.form.obraId) {
-            throw new Error("Debe seleccionar una obra para crear un Ítem.");
-        }
-
-        await api.post('/items-obra', this.form); 
-        
-        this.message = `Ítem '${this.form.nombre}' creado con éxito.`;
-        this.isSuccess = true;
-        this.form.nombre = '';
-        this.form.codigo = '';
-        
-        this.fetchItems(this.form.obraId); 
-
-      } catch (error) {
-        const msg = error.message || error.response?.data?.message || 'Error al crear el Ítem de Obra.';
-        this.message = msg;
-        this.isSuccess = false;
-        console.error("Error al crear ítem:", error);
-      }
+  try {
+    if (!this.form.obraId) {
+      throw new Error("Debe seleccionar una obra.");
     }
+
+    const payload = {
+      nombre: this.form.nombre,
+      codigo: this.form.codigo
+    };
+
+    await api.post(
+      `/obras/${this.form.obraId}/items`,
+      payload
+    );
+
+    this.message = `Ítem '${this.form.nombre}' creado con éxito.`;
+    this.isSuccess = true;
+
+    this.form.nombre = '';
+    this.form.codigo = '';
+
+    this.fetchItems(this.form.obraId);
+
+  } catch (error) {
+    this.message =
+      error.response?.data?.message ||
+      error.message ||
+      "Error al crear el Ítem de Obra.";
+    this.isSuccess = false;
+  }
+}
+
   }
 };
 </script>
