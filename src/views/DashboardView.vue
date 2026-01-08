@@ -10,6 +10,7 @@
           
         <div class="action-buttons-container">
           <template v-if="authStore.canModify"> 
+
             <button 
               @click="$router.push({ name: 'CrearObra' })" 
               class="btn-action btn-create-obra"
@@ -23,6 +24,15 @@
             >
               <i class="fas fa-cube"></i> Agregar Material
             </button>
+
+            <!-- 🔥 NUEVO BOTÓN CREAR USUARIO -->
+            <button 
+              @click="$router.push({ name: 'CrearUsuario' })"
+              class="btn-action btn-create-user"
+            >
+              <i class="fas fa-user-plus"></i> Crear Usuario
+            </button>
+
           </template>
         </div>
       </div>
@@ -74,8 +84,8 @@
 
 <script>
 import api from "../config/axios.Config.js";
-import { jwtDecode } from 'jwt-decode';
-import { useAuthStore } from '../stores/authStore'; 
+import { jwtDecode } from "jwt-decode";
+import { useAuthStore } from "../stores/authStore"; 
 
 export default {
   name: "DashboardView",
@@ -99,7 +109,6 @@ export default {
   },
 
   methods: {
-    // 🔧 CORREGIDO — ahora sí abre y cierra la sidebar
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
     },
@@ -115,12 +124,12 @@ export default {
     },
 
     getUserDataFromToken() {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       if (token) {
         try {
           const decoded = jwtDecode(token);
           this.authStore.loadUserFromToken(token);
-          this.userName = decoded.nombre || decoded.email?.split('@')[0];
+          this.userName = decoded.nombre || decoded.email?.split("@")[0];
         } catch (error) {
           console.error("Error decodificando JWT:", error);
           this.logout();
@@ -132,14 +141,13 @@ export default {
 
     logout() {
       this.authStore.logout();
-      this.$router.push({ name: 'Login' });
+      this.$router.push({ name: "Login" });
     },
 
     seleccionarObra(id) {
       this.obraActiva = id;
       this.$router.push(`/dashboard/obra/${id}`);
 
-      // ✔ correcto: solo cerrar sidebar en móvil al SELECCIONAR obra
       if (window.innerWidth < 768) {
         this.sidebarOpen = false;
       }

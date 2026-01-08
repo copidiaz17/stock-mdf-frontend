@@ -77,6 +77,13 @@ const routes = [
         props: true, 
         meta: { requiresAuth: true }
       },
+
+{
+  path: "/dashboard/crear-usuario",
+  name: "CrearUsuario",
+  component: () => import("../views/CrearUsuarioView.vue"),
+}
+
     ],
   },
 ];
