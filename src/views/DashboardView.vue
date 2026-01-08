@@ -26,12 +26,14 @@
             </button>
 
             <!-- 🔥 NUEVO BOTÓN CREAR USUARIO -->
-            <button 
-              @click="$router.push({ name: 'CrearUsuario' })"
-              class="btn-action btn-create-user"
-            >
-              <i class="fas fa-user-plus"></i> Crear Usuario
-            </button>
+            <button
+  v-if="authStore.user?.id === 5"
+  @click="$router.push({ name: 'CrearUsuario' })"
+  class="btn-action btn-create-user"
+>
+  👤 Crear Usuario
+</button>
+
 
           </template>
         </div>
