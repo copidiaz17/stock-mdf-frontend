@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import api from "../config/axiosConfig.js";
+import api from "../config/axios.Config.js";
 import { useAuthStore } from "../stores/authStore";
 
 export default {
