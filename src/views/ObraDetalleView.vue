@@ -178,6 +178,27 @@ export default {
       }
     },
 
+async eliminarObra() {
+  const confirmar = confirm(
+    `⚠️ ATENCIÓN\n\nVas a eliminar la obra:\n"${this.obra.nombre}"\n\n` +
+    `Se eliminarán materiales, movimientos e ítems asociados.\n\n¿Deseas continuar?`
+  );
+
+  if (!confirmar) return;
+
+  try {
+    await api.delete(`/obras/${this.id}`);
+    alert("✅ Obra eliminada correctamente");
+
+    // 🔑 Volvemos al dashboard SIN romper la app
+    this.$router.push("/dashboard");
+  } catch (error) {
+    console.error("Error al eliminar obra:", error);
+    alert("❌ No se pudo eliminar la obra");
+  }
+}
+
+
     async cargarMovimientos() {
       try {
         const res = await api.get(`/obras/${this.id}/movimientos`);
@@ -230,25 +251,6 @@ export default {
     }
   },
 
-async eliminarObra() {
-  const confirmar = confirm(
-    `⚠️ ATENCIÓN\n\nVas a eliminar la obra:\n"${this.obra.nombre}"\n\n` +
-    `Se eliminarán materiales, movimientos e ítems asociados.\n\n¿Deseas continuar?`
-  );
-
-  if (!confirmar) return;
-
-  try {
-    await api.delete(`/obras/${this.id}`);
-    alert("✅ Obra eliminada correctamente");
-
-    // 🔑 Volvemos al dashboard SIN romper la app
-    this.$router.push("/dashboard");
-  } catch (error) {
-    console.error("Error al eliminar obra:", error);
-    alert("❌ No se pudo eliminar la obra");
-  }
-}
 
 
 };
