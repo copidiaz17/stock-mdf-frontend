@@ -13,6 +13,18 @@
           <i class="fas fa-tags"></i> Items de Obra
       </button>
 
+      <button
+  v-if="authStore.canModify"
+  @click="eliminarObra"
+  class="btn-primary btn-danger manage-item-btn"
+  style="margin-top: 10px;"
+>
+  🗑 Eliminar Obra
+</button>
+
+
+
+
     </div>
 
     <div class="panel-dividido">
@@ -217,7 +229,31 @@ export default {
       }
     }
   },
+
+async eliminarObra() {
+  const confirmar = confirm(
+    `⚠️ ATENCIÓN\n\nVas a eliminar la obra:\n"${this.obra.nombre}"\n\n` +
+    `Se eliminarán materiales, movimientos e ítems asociados.\n\n¿Deseas continuar?`
+  );
+
+  if (!confirmar) return;
+
+  try {
+    await api.delete(`/obras/${this.id}`);
+    alert("✅ Obra eliminada correctamente");
+
+    // 🔑 Volvemos al dashboard SIN romper la app
+    this.$router.push("/dashboard");
+  } catch (error) {
+    console.error("Error al eliminar obra:", error);
+    alert("❌ No se pudo eliminar la obra");
+  }
+}
+
+
 };
+
+
 </script>
 
 <style scoped>
