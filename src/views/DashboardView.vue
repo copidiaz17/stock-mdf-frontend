@@ -3,7 +3,7 @@
 
     <header class="header header-principal">
       
-      <img src="/falube.jpg" alt="logo" class="logo" />
+      <img src="/logo-mdf.jpg" alt="logo" class="logo" />
       
       <div class="header-main-area">
         <h1 class="main-dashboard-title">SISTEMA DE CONTROL DE STOCK</h1>

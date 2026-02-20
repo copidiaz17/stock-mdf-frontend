@@ -4,7 +4,7 @@
       <h1 class="login-title">SISTEMA DE CONTROL DE STOCK</h1>
 
       <form @submit.prevent="login" class="login-form">
-        <img src="/falube.jpg" alt="Logo" class="logo" />
+        <img src="/logo-mdf.jpg" alt="Logo MDF" class="logo" />
 
         <div class="input-group">
           <input
