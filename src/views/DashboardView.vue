@@ -26,7 +26,7 @@
             </button>
 
             <button
-              v-if="esSuperAdmin"
+              v-if="authStore.isAdmin"
               @click="$router.push({ name: 'CrearUsuario' })"
               class="btn-action btn-user"
             >

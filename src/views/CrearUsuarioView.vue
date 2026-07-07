@@ -106,8 +106,8 @@ export default {
   },
 
   mounted() {
-    // 🔐 Seguridad frontend básica
-    if (!this.authStore.canModify) {
+    // 🔐 Solo admin puede crear usuarios (el operador no)
+    if (!this.authStore.isAdmin) {
       this.$router.push("/dashboard");
     }
   },

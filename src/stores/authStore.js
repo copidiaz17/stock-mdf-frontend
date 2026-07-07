@@ -34,12 +34,12 @@ export const useAuthStore = defineStore('auth', {
     getters: {
         isLoggedIn: (state) => !!state.token,
 
-        // ✔ CORREGIDO PARA COINCIDIR CON EL BACKEND
-        canModify: (state) => state.role === 'admin' || state.role === 'operator',
+        // Roles reales del backend: admin / operador / lector
+        canModify: (state) => state.role === 'admin' || state.role === 'operador',
 
         isAdmin:     (state) => state.role === 'admin',
-        isOperator:  (state) => state.role === 'operator',
-        isViewer:    (state) => state.role === 'viewer'
+        isOperator:  (state) => state.role === 'operador',
+        isViewer:    (state) => state.role === 'lector'
     },
 
     actions: {
