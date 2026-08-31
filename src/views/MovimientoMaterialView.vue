@@ -234,23 +234,22 @@ export default {
     this.accion = this.$route.params.accion;
     this.obraId = this.$route.params.obraId;
     
-    const materialIdParam = this.$route.params.materialId;
+    // El detalle de obra manda el material por query string, no como
+    // parámetro de ruta (la ruta sólo declara :obraId y :accion).
+    const materialIdParam =
+      this.$route.query.materialId ?? this.$route.params.materialId;
 
-    if (!materialIdParam || materialIdParam === "0") {
-        this.materialId = null;
-        this.search = "";
-    } else {
-        this.cargarMateriales().then(() => {
-            const mat = this.materiales.find(m => m.id == materialIdParam);
-            if (mat) {
-                this.materialId = mat.id;
-                this.search = mat.nombre;
-            }
-        });
-    }
+    this.cargarItemsObra();
 
-    this.cargarItemsObra(); 
-    this.cargarMateriales();
+    this.cargarMateriales().then(() => {
+      if (!materialIdParam || materialIdParam === "0") return;
+
+      const mat = this.materiales.find((m) => m.id == materialIdParam);
+      if (mat) {
+        this.materialId = mat.id;
+        this.search = mat.nombre;
+      }
+    });
   }
 };
 </script>
