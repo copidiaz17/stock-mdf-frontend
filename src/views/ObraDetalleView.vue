@@ -262,8 +262,9 @@ export default {
   computed: {
     filteredMateriales() {
       if (!this.search) return this.materiales;
+      const buscado = this.search.toLowerCase();
       return this.materiales.filter((m) =>
-        m.nombre.toLowerCase().includes(this.search.toLowerCase())
+        String(m.nombre || "").toLowerCase().includes(buscado)
       );
     },
 
@@ -274,25 +275,41 @@ export default {
 
   methods: {
     async cargarObra() {
-      const res = await api.get(`/obras/${this.id}`);
-      this.obra = res.data;
+      try {
+        const res = await api.get(`/obras/${this.id}`);
+        this.obra = res.data;
+      } catch (err) {
+        console.error("Error cargando la obra", err);
+      }
     },
 
     async cargarMateriales() {
-      const res = await api.get(`/obras/${this.id}/materiales`);
-      this.materiales = res.data;
+      try {
+        const res = await api.get(`/obras/${this.id}/materiales`);
+        this.materiales = res.data;
+      } catch (err) {
+        console.error("Error cargando materiales de la obra", err);
+        this.materiales = [];
+      }
     },
 
     /*
       El filtro de material usa el catálogo completo y no el stock de la
       obra: un material consumido del todo desaparece del stock, pero sus
       movimientos siguen existiendo y hay que poder buscarlos.
+
+      Se carga UNA sola vez: los materiales son globales, no dependen de
+      la obra. Recargarlo al cambiar de obra reasignaba el array y obligaba
+      a Vue a redibujar los cientos de <option> del filtro cada vez, que es
+      lo que trababa la pantalla.
     */
     async cargarCatalogoMateriales() {
+      if (this.catalogoMateriales.length) return;
+
       try {
         const res = await api.get("/materiales");
         this.catalogoMateriales = [...res.data].sort((a, b) =>
-          a.nombre.localeCompare(b.nombre)
+          String(a.nombre || "").localeCompare(String(b.nombre || ""))
         );
       } catch (err) {
         console.error("Error cargando catálogo de materiales", err);
@@ -312,13 +329,19 @@ export default {
       this.cargandoMovimientos = true;
       this.errorMovimientos = "";
 
+      // Si se cambia de obra antes de que llegue la respuesta, la vieja
+      // ya no sirve: descartamos lo que no corresponda a la obra actual.
+      const pedidoPara = String(this.id);
+
       try {
         const params = { limit: this.limite };
         for (const [clave, valor] of Object.entries(this.filtros)) {
           if (valor !== "") params[clave] = valor;
         }
 
-        const res = await api.get(`/obras/${this.id}/movimientos`, { params });
+        const res = await api.get(`/obras/${pedidoPara}/movimientos`, { params });
+
+        if (pedidoPara !== String(this.id)) return;
 
         // Tolera la respuesta vieja (array pelado) por si el frontend
         // queda desplegado antes que el backend.
@@ -331,13 +354,14 @@ export default {
           this.total = datos.total ?? this.movimientos.length;
         }
       } catch (err) {
+        if (pedidoPara !== String(this.id)) return;
         console.error(err);
         this.errorMovimientos =
           err.response?.data?.message || "No se pudieron cargar los movimientos.";
         this.movimientos = [];
         this.total = 0;
       } finally {
-        this.cargandoMovimientos = false;
+        if (pedidoPara === String(this.id)) this.cargandoMovimientos = false;
       }
     },
 
@@ -446,6 +470,12 @@ export default {
     },
   },
 
+  // El catálogo de materiales es global: se pide una vez y no en cada
+  // cambio de obra.
+  created() {
+    this.cargarCatalogoMateriales();
+  },
+
   watch: {
     id: {
       immediate: true,
@@ -455,7 +485,6 @@ export default {
         this.search = "";
         this.cargarObra();
         this.cargarMateriales();
-        this.cargarCatalogoMateriales();
         this.cargarItems();
         this.cargarMovimientos();
       },
