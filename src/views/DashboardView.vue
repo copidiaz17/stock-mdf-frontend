@@ -105,12 +105,6 @@ export default {
     };
   },
 
-  computed: {
-    esSuperAdmin() {
-      return this.authStore.user && this.authStore.user.id === 1;
-    },
-  },
-
   created() {
     this.getUserDataFromToken();
   },

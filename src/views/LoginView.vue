@@ -24,8 +24,8 @@
           />
         </div>
 
-        <button type="submit" class="btn-submit">
-          Ingresar
+        <button type="submit" class="btn-submit" :disabled="loading">
+          {{ loading ? "Conectando..." : "Ingresar" }}
         </button>
 
         <p v-if="error" class="error">{{ error }}</p>
@@ -57,8 +57,6 @@ export default {
       this.loading = true;
 
       try {
-        console.log("DEBUG EXECUTION: Enviando credenciales...");
-
         const res = await api.post("/auth/login", {
           email: this.email,
           password: this.password,
@@ -66,19 +64,24 @@ export default {
 
         const token = res.data.token;
 
-        // 1️⃣ Guardar token
         localStorage.setItem("token", token);
 
-        // 2️⃣ Cargar usuario en Pinia INMEDIATAMENTE
         const authStore = useAuthStore();
         authStore.loadUserFromToken(token);
 
-        // 3️⃣ Navegar al dashboard (sin reload)
         this.$router.push({ name: "Dashboard" });
 
       } catch (err) {
-        this.error =
-          err.response?.data?.message || "Error al iniciar sesión";
+        // En Render el backend se duerme: el primer login del día puede
+        // tardar bastante en despertar el servicio.
+        const isTimeout =
+          err.code === "ECONNABORTED" || err?.message?.includes("timeout");
+
+        if (isTimeout) {
+          this.error = "El servidor tardó en responder. Intentá de nuevo en unos segundos.";
+        } else {
+          this.error = err.response?.data?.message || "Error al iniciar sesión";
+        }
       } finally {
         this.loading = false;
       }
