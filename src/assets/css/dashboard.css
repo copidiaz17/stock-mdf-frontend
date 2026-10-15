@@ -147,6 +147,8 @@ img { max-width: 100%; height: auto; }
 .btn-create-obra { background: #15803d; }
 .btn-info        { background: #3B5FCC; }
 .btn-user        { background: #6D28D9; }
+.btn-maquinas    { background: #0F766E; }
+.btn-catalogo    { background: #7C3AED; }
 
 /* PERFIL + LOGOUT */
 .user-profile-widget {

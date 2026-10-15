@@ -9,6 +9,9 @@ import CrearObraView from "../views/CrearObraView.vue";
 import CrearMaterialView from "../views/CrearMaterialView.vue";
 import ItemObraView from "../views/ItemObraView.vue";
 import ConsumoItemView from "../views/ConsumoItemView.vue";
+import MaquinasView from "../views/MaquinasView.vue";
+import MaquinaDetalleView from "../views/MaquinaDetalleView.vue";
+import CatalogoView from "../views/CatalogoView.vue";
 
 import { useAuthStore } from '../stores/authStore';
 
@@ -76,6 +79,23 @@ const routes = [
         path: "crear-material",
         name: "CrearMaterial",
         component: CrearMaterialView,
+      },
+      {
+        path: "maquinas",
+        name: "Maquinas",
+        component: MaquinasView,
+      },
+      {
+        path: "maquinas/:id",
+        name: "MaquinaDetalle",
+        component: MaquinaDetalleView,
+        props: true,
+      },
+      {
+        // Sólo admin: el backend rechaza a los demás.
+        path: "catalogo",
+        name: "Catalogo",
+        component: CatalogoView,
       },
       {
         path: "items-obra/:obraId?",

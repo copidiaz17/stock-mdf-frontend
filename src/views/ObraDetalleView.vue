@@ -31,7 +31,29 @@
       </div>
     </div>
 
-    <div class="panel-dividido">
+    <!-- Materiales por un lado; herramientas y máquinas por otro -->
+    <div class="pestanas">
+      <button
+        :class="['pestana', { activa: pestana === 'materiales' }]"
+        @click="pestana = 'materiales'"
+      >
+        🧱 Materiales
+      </button>
+      <button
+        :class="['pestana', { activa: pestana === 'herramientas' }]"
+        @click="pestana = 'herramientas'"
+      >
+        🛠 Herramientas y maquinarias
+      </button>
+    </div>
+
+    <HerramientasObra
+      v-if="pestana === 'herramientas'"
+      :obra-id="id"
+      :obra-nombre="obra.nombre || ''"
+    />
+
+    <div v-show="pestana === 'materiales'" class="panel-dividido">
 
       <!-- MATERIALES -->
       <div class="bloque">
@@ -217,6 +239,7 @@
 <script>
 import api from "../config/axios.Config.js";
 import { useAuthStore } from "../stores/authStore";
+import HerramientasObra from "../components/HerramientasObra.vue";
 
 const PAGINA = 50;
 
@@ -231,6 +254,7 @@ function aISO(fecha) {
 export default {
   name: "ObraDetalleView",
   props: ["id"],
+  components: { HerramientasObra },
 
   setup() {
     const authStore = useAuthStore();
@@ -239,6 +263,9 @@ export default {
 
   data() {
     return {
+      // Se mantiene al cambiar de obra: si estás mirando herramientas,
+      // seguís en herramientas.
+      pestana: "materiales",
       obra: {},
       materiales: [],
       catalogoMateriales: [],
@@ -464,9 +491,14 @@ export default {
       );
       if (!ok) return;
 
-      await api.delete(`/obras/${this.id}`);
-      alert("✅ Obra eliminada correctamente");
-      this.$router.push("/dashboard");
+      try {
+        await api.delete(`/obras/${this.id}`);
+        alert("✅ Obra eliminada correctamente");
+        this.$router.push("/dashboard");
+      } catch (err) {
+        // P. ej. si todavía tiene máquinas: hay que trasladarlas antes.
+        alert(err.response?.data?.message || "No se pudo eliminar la obra");
+      }
     },
   },
 
@@ -530,6 +562,33 @@ export default {
 .btn-obra-azul  { background-color: var(--color-blue, #3B5FCC); }
 .btn-obra-verde { background-color: var(--color-green, #28a745); }
 .btn-obra-rojo  { background-color: var(--color-red, #dc2626); }
+
+/* PESTAÑAS: materiales / herramientas y maquinarias */
+.pestanas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  border-bottom: 2px solid var(--color-surface-2, #2c2c2c);
+  margin-bottom: 18px;
+}
+
+.pestana {
+  padding: 9px 18px;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  background: transparent;
+  color: var(--color-text-muted, #aaa);
+  font-size: 0.98rem;
+  font-weight: bold;
+  cursor: pointer;
+}
+.pestana:hover { color: var(--color-text, #f0f0c0); }
+.pestana.activa {
+  color: var(--color-accent, #f0c040);
+  border-bottom-color: var(--color-accent, #f0c040);
+}
 
 .panel-dividido {
   display: grid;

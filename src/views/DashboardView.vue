@@ -9,7 +9,22 @@
         <h1 class="main-dashboard-title">SISTEMA DE CONTROL DE STOCK</h1>
           
         <div class="action-buttons-container">
-          <template v-if="authStore.canModify"> 
+          <button
+            @click="$router.push({ name: 'Maquinas' })"
+            class="btn-action btn-maquinas"
+          >
+            🚜 Máquinas
+          </button>
+
+          <button
+            v-if="authStore.isAdmin"
+            @click="$router.push({ name: 'Catalogo' })"
+            class="btn-action btn-catalogo"
+          >
+            📚 Catálogo
+          </button>
+
+          <template v-if="authStore.canModify">
 
             <button 
               @click="$router.push({ name: 'CrearObra' })" 
