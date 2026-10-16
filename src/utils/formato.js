@@ -15,6 +15,13 @@ export function formatFecha(valor) {
   return `${dia}/${mes}/${anio}`;
 }
 
+// Misma lista que el backend (lib/unidades.js). Se usa si el servidor no la
+// devuelve, para que nunca quede el formulario sin unidades para elegir.
+export const UNIDADES = [
+  "unidad", "bolsa", "kg", "g", "m", "m2", "m3", "litro", "barra", "rollo",
+  "palet", "hoja", "pliego", "paquete", "caja", "par", "juego",
+];
+
 export const ESTADOS_MAQUINA = {
   en_uso: { texto: "En uso", clase: "tag-verde" },
   en_reparacion: { texto: "En reparación", clase: "tag-amarillo" },

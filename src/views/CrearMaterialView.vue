@@ -64,6 +64,7 @@
 
 <script>
 import api from "../config/axios.Config.js";
+import { UNIDADES } from "../utils/formato.js";
 
 export default {
   name: 'CrearMaterialView',
@@ -82,11 +83,14 @@ export default {
     };
   },
   async created() {
+    // Si el servidor no devuelve la lista (p. ej. un backend todavía sin
+    // actualizar), se usa la del frontend: nunca queda sin unidades.
+    this.unidades = UNIDADES;
     try {
       const res = await api.get("/materiales/unidades");
-      this.unidades = res.data;
+      if (Array.isArray(res.data) && res.data.length) this.unidades = res.data;
     } catch (err) {
-      this.error = "No se pudieron cargar las unidades";
+      console.warn("Unidades del servidor no disponibles, se usa la lista local", err?.response?.status);
     }
   },
   methods: {
